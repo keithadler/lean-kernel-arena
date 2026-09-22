@@ -15,8 +15,8 @@ description: |
   on the prelude of the kind the arena's README permits.
 url: https://github.com/keithadler/tenet
 ref: main
-rev: 1319aba70cf7dc7cbc9ae3afd06477bb2434ede0
-version: "0.10.0"
+rev: ef0f2e304c3265ee7398e15233e5e8cd94382d03
+version: "0.11.1"
 
 # Tenet checks declarations on several threads, so it has to say how many or the runner will
 # oversubscribe the machine and spoil everyone else's timings. Four, not twelve: measured on all of
@@ -35,8 +35,13 @@ run: |
   # which is an error and is left to surface as one rather than being hidden as a decline.
   # `|| c=$?` rather than a bare call: the arena runs this through /bin/sh without -e, so a bare call
   # would be fine, but this is correct under either and the difference is invisible until it is not.
+  # DOTNET_GCHeapCount=4 for the same reason as --jobs 4, said twice because the .NET collector does
+  # not read the threads field: it sizes itself from the machine, so on this eight-core runner it
+  # builds eight heaps and holds gen0 headroom in each while only four workers ever run. Measured on
+  # a 164k-declaration export, eight heaps against four is 2.95 GB against 2.06 GB of peak resident
+  # for the same instructions, and about 9% more wall time because collection stops overlapping.
   c=0
-  ./arena-bin/tenet check "$IN" --quiet --jobs 4 || c=$?
+  DOTNET_GCHeapCount=4 ./arena-bin/tenet check "$IN" --quiet --jobs 4 || c=$?
   case $c in
     0|1) exit $c ;;
     4)   exit 2 ;;
