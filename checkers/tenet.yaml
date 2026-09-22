@@ -37,9 +37,15 @@ run: |
   # would be fine, but this is correct under either and the difference is invisible until it is not.
   # DOTNET_GCHeapCount=4 for the same reason as --jobs 4, said twice because the .NET collector does
   # not read the threads field: it sizes itself from the machine, so on this eight-core runner it
-  # builds eight heaps and holds gen0 headroom in each while only four workers ever run. Measured on
-  # a 164k-declaration export, eight heaps against four is 2.95 GB against 2.06 GB of peak resident
-  # for the same instructions, and about 9% more wall time because collection stops overlapping.
+  # builds eight heaps and holds gen0 headroom in each while only four workers ever run. On a
+  # 164k-declaration export, eight heaps against four is 3.03 GB against 2.09 GB of peak resident
+  # for the same instructions (989.3 G against 988.3 G, three runs each), and about 9% more wall
+  # time because collection stops overlapping the checking.
+  #
+  # It is a trade rather than a win on the single-declaration perf/ tests, where only one worker
+  # ever runs and the peak is live data rather than headroom: magma-list-pair-n21 goes 175.5 G to
+  # 203.0 G of instructions while its peak falls 5.94 GB to 4.69 GB, and magma-list-deep-n36 goes
+  # 342.9 G to 361.8 G for no change in peak.
   c=0
   DOTNET_GCHeapCount=4 ./arena-bin/tenet check "$IN" --quiet --jobs 4 || c=$?
   case $c in
