@@ -31,6 +31,7 @@
           ghc
           texlive.combined.scheme-basic
           dotnet-sdk_10
+          jdk
         ];
       };
     };
