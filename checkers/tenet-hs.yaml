@@ -23,8 +23,8 @@ description: |
   Written by Claude (Anthropic), directed by Keith Adler.
 url: https://github.com/keithadler/tenet-hs
 ref: main
-rev: b9b424827febc8ebb1e2aea3dbcacef185278084
-version: "0.1.1"
+rev: c1dfa0eece89bdffe9e4018a9ade8b58e14066e3
+version: "0.1.2"
 
 # One worker: declarations are checked in order, in one thread, so the default of one CPU slot is
 # the honest declaration.
