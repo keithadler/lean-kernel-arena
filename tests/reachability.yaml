@@ -1,0 +1,12 @@
+description: |
+  [Reachability](https://github.com/Arrow7000/reachability): verified, kernel-reducible
+  reachability and shortest walks for finite directed graphs, built on Mathlib.
+  Its breadth-first search is plain structural recursion, so the examples are proved with
+  `decide +kernel`, which makes the kernel evaluate the search itself. This test exports
+  the whole `Reachability` module and its dependencies.
+url: https://github.com/Arrow7000/reachability
+ref: v0.1.2
+rev: d822b1c70b4a6ec858b54ee51f12b0cb30628982
+module: Reachability
+outcome: accept
+compare-perf: true
